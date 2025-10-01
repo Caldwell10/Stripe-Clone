@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, condecimal
 from decimal import Decimal as decimal
 
 
@@ -15,10 +15,11 @@ class UserResponse(BaseModel):
     phone_number: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class PaymentCreate(BaseModel):
-    amount: decimal
+    user_id: int
+    amount: condecimal(gt=0, max_digits=12, decimal_places=2)
     currency: str
 
 class PaymentResponse(BaseModel):
@@ -31,7 +32,7 @@ class PaymentResponse(BaseModel):
     updated_at: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class WebhookIn(BaseModel):
     payment_id: int
