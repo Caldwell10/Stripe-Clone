@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, Field, condecimal
 from decimal import Decimal as decimal
+from datetime import datetime
 
 
 class UserCreate(BaseModel):
@@ -28,8 +29,8 @@ class PaymentResponse(BaseModel):
     currency: str
     user_id: int
     status: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
 
     class Config:
         from_attributes = True

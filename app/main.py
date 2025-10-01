@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from db import get_db
-from schemas import UserCreate, UserResponse
-from models import User
+from schemas import UserCreate, UserResponse, PaymentResponse, PaymentCreate
+from models import User, Payment
 from services import hash_password
 from sqlalchemy.orm import query
 import uvicorn 
@@ -27,8 +27,25 @@ def create_user(user: UserCreate, db=Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    
+
     return new_user
+
+@app.post("/payments{user_id}", response_model=PaymentResponse)
+def create_payment(payment: PaymentCreate, db=Depends(get_db)):
+    if not db.query(User).filter(User.id == payment.user_id).first():
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    new_payment = Payment(
+        user_id = payment.user_id,
+        amount = payment.amount,
+        currency = payment.currency
+    )
+    db.add(new_payment)
+    db.commit()
+    db.refresh(new_payment)
+
+    return new_payment
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8001)
