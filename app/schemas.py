@@ -35,7 +35,7 @@ class PaymentResponse(BaseModel):
         from_attributes = True
 
 class WebhookIn(BaseModel):
-    payment_id: int
+    payment_id: int 
     score: int
     amount: decimal
     status: str
