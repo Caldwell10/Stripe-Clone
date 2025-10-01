@@ -37,8 +37,8 @@ class PaymentResponse(BaseModel):
 
 class WebhookIn(BaseModel):
     payment_id: int 
-    score: int
     amount: decimal
+    score: int
     status: str
     
    

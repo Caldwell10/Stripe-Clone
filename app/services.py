@@ -14,7 +14,5 @@ def save_transaction_log(db, direction: str, url: str, payload: str, status_code
         status_code=status_code
     )
     db.add(log)
-    db.commit()
-    db.refresh(log)
     return log
 
